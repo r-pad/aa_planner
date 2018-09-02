@@ -1,0 +1,3 @@
+<launch>
+    <node pkg="ffast_planner" type="nodes/planner" name="rl_planner" />
+</launch>
