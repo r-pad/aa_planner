@@ -1,0 +1,23 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+@author: edwardahn
+
+This executable uses the ROS interface to define a node, which calls
+an internal Python module that is abstracted away from ROS to run a
+pre-trained policy on the robot.
+"""
+
+import geometry_msgs.msg
+import nav_msgs.msg
+import rospy
+
+
+def main():
+    rospy.init_node('rl_planner')
+    #rospy.Subscriber(
+    #rospy.Publisher(
+
+
+if __name__ == '__main__':
+    main()
