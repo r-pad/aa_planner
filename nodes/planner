@@ -4,20 +4,39 @@
 @author: edwardahn
 
 This executable uses the ROS interface to define a node, which calls
-an internal Python module that is abstracted away from ROS to run a
-pre-trained policy on the robot.
+an internal generic Python module that is abstracted away from ROS to
+run a pre-trained policy on the robot.
 """
 
-import geometry_msgs.msg
+import ackermann_msgs.msg
 import nav_msgs.msg
 import rospy
 
 
-def main():
-    rospy.init_node('rl_planner')
-    #rospy.Subscriber(
-    #rospy.Publisher(
+class RLPlanner(object):
+    """
+    Define subscriber/publisher to integrate planner into ROS
+    architecture.
+    """
+
+    def __init__(self):
+        """
+        Instantiate ROS and ROS objects.
+        """
+        rospy.init_node('rl_planner')
+        self.pub = rospy.Publisher("commands/cmd_vel",
+                ackermann_msgs.AckermannDriveStamped, queue_size=1)
+        rospy.Subscriber("ekf_localization/odom", nav_msgs.msg.Odometry,
+                self.odometry_callback)
+
+
+    def odometry_callback(self, odom):
+        """
+        Callback function for odometry state updates.
+        """
+        pass
 
 
 if __name__ == '__main__':
-    main()
+    planner = RLPlanner()
+    rospy.spin()

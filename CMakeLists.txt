@@ -3,7 +3,7 @@ project(ffast_planner)
 
 # Find build dependencies
 find_package(catkin REQUIRED COMPONENTS
-    geometry_msgs
+    ackermann_msgs
     nav_msgs
     rospy
 )
@@ -13,7 +13,7 @@ catkin_python_setup()
 
 # Find runtime dependencies
 catkin_package(
-    CATKIN_DEPENDS geometry_msgs nav_msgs rospy
+    CATKIN_DEPENDS ackermann_msgs nav_msgs rospy
 )
 
 # Add other include files
