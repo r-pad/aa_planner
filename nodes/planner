@@ -8,6 +8,8 @@ an internal generic Python module that is abstracted away from ROS to
 run a pre-trained policy on the robot.
 """
 
+import tf
+
 import ackermann_msgs.msg
 import nav_msgs.msg
 import rospy
@@ -34,10 +36,11 @@ class RLPlanner(object):
         """
         Callback function for odometry state updates.
         """
-        x = odom.pose.position.x
-        y = odom.pose.position.y
-        #yaw = tf.getYaw(odom.pose.pose.orientation) # change this
-        yaw = odom.pose.pose.orientation
+        x = odom.pose.pose.position.x
+        y = odom.pose.pose.position.y
+        q = odom.pose.pose.orientation
+        rpy = tf.transformations.euler_from_quaternion([q.x,q.y,q.z,q.w])
+        yaw = rpy[2]
         x_dot = odom.twist.twist.linear.x
         y_dot = odom.twist.twist.linear.y
         yaw_dot = odom.twist.twist.angular.z
