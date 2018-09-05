@@ -25,7 +25,7 @@ class RLPlanner(object):
         """
         rospy.init_node('rl_planner')
         self.pub = rospy.Publisher("commands/cmd_vel",
-                ackermann_msgs.AckermannDriveStamped, queue_size=1)
+                ackermann_msgs.msg.AckermannDriveStamped, queue_size=1)
         rospy.Subscriber("ekf_localization/odom", nav_msgs.msg.Odometry,
                 self.odometry_callback)
 
@@ -34,7 +34,15 @@ class RLPlanner(object):
         """
         Callback function for odometry state updates.
         """
-        pass
+        x = odom.pose.position.x
+        y = odom.pose.position.y
+        #yaw = tf.getYaw(odom.pose.pose.orientation) # change this
+        yaw = odom.pose.pose.orientation
+        x_dot = odom.twist.twist.linear.x
+        y_dot = odom.twist.twist.linear.y
+        yaw_dot = odom.twist.twist.angular.z
+        state = [x, y, yaw, x_dot, y_dot, yaw_dot]
+        print(state)
 
 
 if __name__ == '__main__':
