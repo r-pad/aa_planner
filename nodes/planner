@@ -29,7 +29,7 @@ class RLPlanner(object):
         """
         self.policy = Policy()
         rospy.init_node('rl_planner')
-        self.pub = rospy.Publisher("commands/cmd_vel",
+        self.pub = rospy.Publisher("commands/keyboard",
                 ackermann_msgs.msg.AckermannDriveStamped, queue_size=1)
         rospy.Subscriber("ekf_localization/odom", nav_msgs.msg.Odometry,
                 self.odometry_callback)

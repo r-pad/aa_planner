@@ -6,6 +6,10 @@
 Use a pre-trained policy to run actions on the robot.
 """
 
+import numpy as np
+import os
+import six.moves.cPickle as cPickle
+
 
 class Policy(object):
     """
@@ -13,12 +17,18 @@ class Policy(object):
     """
 
     def __init__(self):
-        pass
+        """
+        Get model from saved pickle.
+        """
+        dirpath = os.path.dirname(os.path.abspath(__file__))
+        f = open(dirpath + '/model.save', 'rb')
+        self.model = cPickle.load(f)
+        f.close()
 
 
     def get_action(self, state):
         """
         Use saved trained policy and run a forward pass to get
-        action.
+        action (desired speed, steering angle).
         """
-        return [101, 110011]
+        return [0.6, np.random.random()-0.5]
