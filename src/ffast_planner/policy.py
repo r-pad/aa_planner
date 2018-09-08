@@ -31,4 +31,25 @@ class Policy(object):
         Use saved trained policy and run a forward pass to get
         action (desired speed, steering angle).
         """
-        return [0.6, np.random.random()-0.5]
+        # Transform state to relative space using convention 2
+        r = 1.5
+        x, y, yaw, x_dot, y_dot, yaw_dot = state
+        dx = np.sqrt(np.square(x) + np.square(y)) - r
+        theta = self._normalize_angle(np.arctan2(-x, y) + np.pi - yaw)
+        ddx = x/(x**2 + y**2)**0.5*x_dot + y/(x**2 + y**2)**0.5*y_dot
+        dtheta = x/(x**2 + y**2)*x_dot - y/(x**2 + y**2)*y_dot - yaw_dot
+        newstate = np.array([dx, theta, ddx, dtheta])
+
+        # Forward pass of policy network
+        mean, log_std = [x[0] for x in self.model([newstate])]
+        return mean
+
+
+    def _normalize_angle(self, angle):
+        """
+        Normalize angle to [-pi, pi).
+        """
+        angle = angle % (2*np.pi)
+        if (angle > np.pi):
+            angle -= 2*np.pi
+        return angle
