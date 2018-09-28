@@ -50,9 +50,10 @@ class RLPlanner(object):
         state = [x, y, yaw, x_dot, y_dot, yaw_dot]
 
         # Publish action from pre-trained model
+        #   Note: sign of velocity command reversed for current robot
         action = self.policy.get_action(state)
         msg = ackermann_msgs.msg.AckermannDriveStamped()
-        msg.drive.speed = action[0]
+        msg.drive.speed = -action[0]
         msg.drive.steering_angle = action[1]
         self.pub.publish(msg)
 
