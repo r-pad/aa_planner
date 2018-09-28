@@ -31,9 +31,11 @@ class Policy(object):
         Use saved trained policy and run a forward pass to get
         action (desired speed, steering angle).
         """
-        # Transform state to relative space using convention 2
         r = 1.5
         x, y, yaw, x_dot, y_dot, yaw_dot = state
+
+        # Transform state to relative space using convention 2
+        y -= r
         dx = np.sqrt(np.square(x) + np.square(y)) - r
         theta = self._normalize_angle(np.arctan2(-x, y) + np.pi - yaw)
         ddx = x/(x**2 + y**2)**0.5*x_dot + y/(x**2 + y**2)**0.5*y_dot
