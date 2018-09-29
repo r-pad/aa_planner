@@ -44,6 +44,10 @@ class Policy(object):
 
         # Forward pass of policy network
         mean, log_std = [x[0] for x in self.model([newstate])]
+        '''
+        if mean[0] < 0.8:
+            mean[0] = 0.8
+        '''
         return mean
 
 
