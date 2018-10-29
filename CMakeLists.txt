@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(ffast_planner)
+project(aa_planner)
 
 # Find build dependencies
 find_package(catkin REQUIRED COMPONENTS

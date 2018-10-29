@@ -1,4 +1,4 @@
 <launch>
-    <node pkg="ffast_planner" type="planner" name="rl_planner"
+    <node pkg="aa_planner" type="planner" name="rl_planner"
         output="screen" />
 </launch>

@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>ffast_planner</name>
+  <name>aa_planner</name>
   <version>0.0.0</version>
   <description>Control the robot with pre-trained policies</description>
 
   <maintainer email="esahn@andrew.cmu.edu">Edward Ahn</maintainer>
   <license>TODO</license>
-  <url type="website">https://github.com/r-pad/ffast_planner</url>
+  <url type="website">https://github.com/r-pad/aa_planner</url>
   <author email="esahn@andrew.cmu.edu">Edward Ahn</author>
 
   <buildtool_depend>catkin</buildtool_depend>

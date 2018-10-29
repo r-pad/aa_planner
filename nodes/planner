@@ -12,8 +12,8 @@ import ackermann_msgs.msg
 import nav_msgs.msg
 import rospy
 
-from ffast_planner.policy import Policy
-from ffast_planner.transformations import euler_from_quaternion
+from aa_planner.policy import Policy
+from aa_planner.transformations import euler_from_quaternion
 
 
 class RLPlanner(object):

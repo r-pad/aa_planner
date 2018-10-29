@@ -1,0 +1,56 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+@author: edwardahn
+
+This executable uses the ROS interface to define a node, which calls
+an internal generic Python module that is abstracted away from ROS to
+run a pre-trained policy on the robot.
+"""
+
+import tf
+
+import ackermann_msgs.msg
+import nav_msgs.msg
+import rospy
+
+
+class RLHelper(object):
+    """
+    Define subscriber/publisher to integrate planner into ROS
+    architecture.
+    """
+
+    def __init__(self):
+        """
+        Instantiate ROS and ROS objects.
+        """
+        rospy.init_node('rl_helper')
+        self.pub = rospy.Publisher("ekf_localization/odom",
+                nav_msgs.msg.Odometry, queue_size=1)
+        self.rate = rospy.Rate(2)
+
+
+    def run(self):
+        """
+        Publish state updates.
+        """
+        while not rospy.is_shutdown():
+            msg = nav_msgs.msg.Odometry()
+            msg.pose.pose.position.x = 10
+            msg.pose.pose.position.y = 11
+            q = tf.transformations.quaternion_from_euler(0, 0, 1.57)
+            msg.pose.pose.orientation.x = q[0]
+            msg.pose.pose.orientation.y = q[1]
+            msg.pose.pose.orientation.z = q[2]
+            msg.pose.pose.orientation.w = q[3]
+            msg.twist.twist.linear.x = 13
+            msg.twist.twist.linear.y = 14
+            msg.twist.twist.angular.z = 15
+            self.pub.publish(msg)
+            self.rate.sleep()
+
+
+if __name__ == '__main__':
+    planner = RLHelper()
+    planner.run()
