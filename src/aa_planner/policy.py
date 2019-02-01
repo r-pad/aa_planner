@@ -32,14 +32,14 @@ class Policy(object):
 
         # Initialize waypoints to follow rounded square.
         self._waypoints = [
-                [0,-1,np.pi], [2,-1,np.pi],
-                [3,0,-np.pi/2], [3,2,-np.pi/2],
-                [2,3,0], [0,3,0], [-1,2,np.pi/2], [-1,0,np.pi/2]]
+                [0,0,np.pi], [1,0,np.pi],
+                [2,1,-np.pi/2], [2,2,-np.pi/2],
+                [1,3,0], [0,3,0], [-1,2,np.pi/2], [-1,1,np.pi/2]]
         self._circle_params = [
-                [0,0,1], [2,0,1], [2,2,1], [0,2,1]]
+                [0,1,1], [1,1,1], [1,2,1], [0,2,1]]
         self._straight_params = [
-                [0,-1,0], [3,0,np.pi/2],
-                [2,3,-np.pi], [-1,2,-np.pi/2]]
+                [0,0,0], [2,1,np.pi/2],
+                [1,3,-np.pi], [-1,2,-np.pi/2]]
 
         # Initialize meta variables to keep track of current waypoint
         self._on_circle = True
@@ -67,7 +67,7 @@ class Policy(object):
             return self._get_action_straight(state)
 
 
-    def _state_at_waypoint(state):
+    def _state_at_waypoint(self, state):
         """
         Return True if robot state has passed the current waypoint.
         """
