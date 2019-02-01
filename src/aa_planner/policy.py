@@ -121,10 +121,7 @@ class Policy(object):
         dist = np.sqrt(np.square(x - x0) + np.square(y - y0))
         new_y = dist * np.sin(projection_dir)
         new_yaw = self._normalize_angle(yaw - target_dir)
-        new_x_dot = x_dot*np.cos(target_dir) + y_dot*np.sin(target_dir)
-        new_y_dot = y_dot*np.cos(target_dir) - x_dot*np.sin(target_dir)
-        newstate = np.array(
-                [new_y, new_yaw, new_x_dot, new_y_dot, yaw_dot])
+        newstate = np.array([new_y, new_yaw, x_dot, y_dot, yaw_dot])
 
         # Forward pass of policy network
         mean,log_std = [x[0] for x in self._straight_model([newstate])]
