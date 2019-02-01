@@ -77,7 +77,7 @@ class Policy(object):
 
         # TODO: what does this mean?
         current_dir = np.arctan2((y - waypoint_y), (x - waypoint_x))
-        intersect_angle = self._normalize_angle(current_dir,
+        intersect_angle = self._normalize_angle(current_dir -
                 waypoint_dir)
         return np.absolute(intersect_angle) <= np.pi / 2
 
@@ -118,7 +118,7 @@ class Policy(object):
 
         current_dir = np.arctan2((y - y0), (x - x0))
         projection_dir = current_dir - target_dir
-        dist = np.sqrt(np.square(x - x0), np.square(y - y0))
+        dist = np.sqrt(np.square(x - x0) + np.square(y - y0))
         new_y = dist * np.sin(projection_dir)
         new_yaw = self._normalize_angle(yaw - target_dir)
         new_x_dot = x_dot*np.cos(target_dir) + y_dot*np.sin(target_dir)
