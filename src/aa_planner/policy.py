@@ -46,6 +46,12 @@ class Policy(object):
         self._waypoint_num = 0          # 8 looping waypoints
         self._param_num = 0             # 4 params per trajectory type
 
+        # Scale actions (lower and upper bounds)
+        self._steer_lb = -np.pi/4
+        self._steer_ub = np.pi/4
+        self._vel_lb = 0.0
+        self._vel_ub = 1.3
+
 
     def get_action(self, state):
         """
@@ -61,10 +67,26 @@ class Policy(object):
             self._on_circle = not self._on_circle
             self._waypoint_num = (self._waypoint_num + 1) % 4
 
+        self._on_circle = False
         if self._on_circle:
-            return self._get_action_circle(state)
+            action = self._get_action_circle(state)
         else:
-            return self._get_action_straight(state)
+            action = self._get_action_straight(state)
+        return self._scaled_action(action)
+
+
+    def _scaled_action(self, action):
+        """
+        Scale actions - see rllab's normalized_env's step() function.
+        """
+        scaled_action = []
+        scaled_velocity = self._vel_lb + \
+                (action[0] + 1) * 0.5 * (self._vel_ub - self._vel_lb)
+        scaled_steering = self._steer_lb + \
+                (action[1] + 1) * 0.5 * (self._steer_ub - self._steer_lb)
+        scaled_action.append(scaled_velocity)
+        scaled_action.append(scaled_steering)
+        return scaled_action
 
 
     def _state_at_waypoint(self, state):
@@ -75,7 +97,6 @@ class Policy(object):
         waypoint = self._waypoints[self._waypoint_num]
         waypoint_x, waypoint_y, waypoint_dir = waypoint
 
-        # TODO: what does this mean?
         current_dir = np.arctan2((y - waypoint_y), (x - waypoint_x))
         intersect_angle = self._normalize_angle(current_dir -
                 waypoint_dir)
@@ -112,6 +133,11 @@ class Policy(object):
         Use saved policy to control a car to follow a straight
         trajectory.
         """
+        newstate = state[1:]
+        mean,log_std = [x[0] for x in self._straight_model([newstate])]
+        return mean
+
+
         x0, y0, target_dir = self._straight_params[self._param_num]
         x, y, yaw, x_dot, y_dot, yaw_dot = state
         target_dir = target_dir % (2*np.pi)
