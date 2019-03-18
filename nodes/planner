@@ -8,6 +8,8 @@ an internal generic Python module that is abstracted away from ROS to
 run a pre-trained policy on the robot.
 """
 
+import argparse
+
 import ackermann_msgs.msg
 import nav_msgs.msg
 import rospy
@@ -22,11 +24,11 @@ class RLPlanner(object):
     architecture.
     """
 
-    def __init__(self):
+    def __init__(self, planner_mode):
         """
         Instantiate ROS and ROS objects.
         """
-        self.policy = Policy()
+        self.policy = Policy(planner_mode=planner_mode)
         rospy.init_node('rl_planner')
         self.pub = rospy.Publisher("commands/keyboard",
                 ackermann_msgs.msg.AckermannDriveStamped, queue_size=1)
@@ -58,6 +60,17 @@ class RLPlanner(object):
         self.pub.publish(msg)
 
 
+def parse_arguments():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--mode",
+            choices=["straight", "circle", "rounded_square"],
+            default="rounded_square",
+            help="Planner mode")
+    args = parser.parse_args()
+    return args
+
+
 if __name__ == '__main__':
-    planner = RLPlanner()
+    args = parse_arguments()
+    planner = RLPlanner(planner_mode=args.mode)
     rospy.spin()

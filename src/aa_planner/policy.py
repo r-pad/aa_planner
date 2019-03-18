@@ -17,10 +17,12 @@ class Policy(object):
     Run a forward pass of a pre-trained policy.
     """
 
-    def __init__(self):
+    def __init__(self, planner_mode):
         """
         Get model from saved pickle and initialize waypoints.
         """
+        self._planner_mode = planner_mode
+
         # Open saved models.
         dirpath = os.path.dirname(os.path.abspath(__file__))
         f_straight = open(dirpath + '/straight_model.save', 'rb')
@@ -30,7 +32,7 @@ class Policy(object):
         f_straight.close()
         f_circle.close()
 
-        # Initialize waypoints to follow rounded square.
+        # Initialize waypoints to follow rounded square
         self._waypoints = [
                 [0,0,np.pi], [1,0,np.pi],
                 [2,1,-np.pi/2], [2,2,-np.pi/2],
@@ -60,6 +62,13 @@ class Policy(object):
         get an action (desired speed, steering angle) to control
         the car.
         """
+        if self._planner_mode == "straight":
+            action = self._get_action_straight(state)
+            return self._scaled_action(action)
+        elif self._planner_mode == "circle":
+            action = self._get_action_circle(state)
+            return self._scaled_action(action)
+
         # Check if state at waypoint and if so, switch trajectory type
         if self._state_at_waypoint(state):
             if not self._on_circle:
@@ -133,11 +142,6 @@ class Policy(object):
         Use saved policy to control a car to follow a straight
         trajectory.
         """
-        newstate = state[1:]
-        mean,log_std = [x[0] for x in self._straight_model([newstate])]
-        return mean
-
-
         x0, y0, target_dir = self._straight_params[self._param_num]
         x, y, yaw, x_dot, y_dot, yaw_dot = state
         target_dir = target_dir % (2*np.pi)
