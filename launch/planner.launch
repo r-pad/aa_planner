@@ -1,4 +1,5 @@
 <launch>
+    <arg name="mode" default="rounded_square" />
     <node pkg="aa_planner" type="planner" name="rl_planner"
-        output="screen" />
+        args="--mode $(arg mode)" output="screen" />
 </launch>
