@@ -74,9 +74,8 @@ class Policy(object):
             if not self._on_circle:
                 self._param_num = (self._param_num + 1) % 4
             self._on_circle = not self._on_circle
-            self._waypoint_num = (self._waypoint_num + 1) % 4
+            self._waypoint_num = (self._waypoint_num + 1) % 8
 
-        self._on_circle = False
         if self._on_circle:
             action = self._get_action_circle(state)
         else:
@@ -109,7 +108,7 @@ class Policy(object):
         current_dir = np.arctan2((y - waypoint_y), (x - waypoint_x))
         intersect_angle = self._normalize_angle(current_dir -
                 waypoint_dir)
-        return np.absolute(intersect_angle) <= np.pi / 2
+        return np.absolute(intersect_angle) > np.pi / 2
 
 
     def _get_action_circle(self, state):
@@ -125,7 +124,6 @@ class Policy(object):
         y -= y0
 
         # Transform state to relative space using convention 2
-        y -= r
         dx = np.sqrt(np.square(x) + np.square(y)) - r
         theta = self._normalize_angle(np.arctan2(-x, y) + np.pi - yaw)
         ddx = x/(x**2 + y**2)**0.5*x_dot + y/(x**2 + y**2)**0.5*y_dot
