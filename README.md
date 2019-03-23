@@ -1,6 +1,12 @@
 # Assured Autonomy - Robot Planner
 
-This module integrates trained planners from [aa\_simulation](https://github.com/r-pad/aa_simulation) into the software architecture of the [FFAST](https://github.com/jsford/FFAST) RC vehicle. Specifically, this module allows the planner trained from simulation to be run on the FFAST vehicle with ROS.
+This module integrates trained planners from [aa\_simulation](https://github.com/r-pad/aa_simulation) into the software architecture of the [FFAST](https://github.com/jsford/FFAST) RC vehicle. Specifically, this module allows the planner trained from simulation to be run on the FFAST vehicle using ROS Kinetic. ROS is the only dependency.
+
+## Code Structure
+
+The ```nodes``` directory contains the file ```nodes/planner``` which acts as a ROS wrapper for the planner. In other words, it subscribes to localization messages and publishes action commands from the trained policy. This is the only file that calls ROS functions.
+
+The ```src``` directory contains the file ```src/aa_planner/policy.py``` which reads from the trained policies. Files in this directory are not dependent on ROS.
 
 ## Instructions
 
