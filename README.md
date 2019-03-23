@@ -1,25 +1,15 @@
 # Assured Autonomy - Robot Planner
 
-This module integrates trained planners into the software architecture of the [FFAST](https://github.com/jsford/FFAST) RC vehicle, designed to run safe motion planning algorithms for the vehicle.
+This module integrates trained planners from [aa\_simulation](https://github.com/r-pad/aa_simulation) into the software architecture of the [FFAST](https://github.com/jsford/FFAST) RC vehicle. Specifically, this module allows the planner trained from simulation to be run on the FFAST vehicle with ROS.
 
-## Disclaimer
+## Instructions
 
-Because this vehicle uses an Nvidia Jetson TX2 running Ubuntu 16.04 as its base operating system, it uses ROS Kinetic as a backbone for communications within subsystems of the vehicle. However, ROS Kinetic only supports Python 2 and not Python 3, even though trained models from [aa\_simulation](https://github.com/r-pad/aa_simulation) can only be unpickled using Python 3.
-
-As a result, this ROS node must be run in a separate virtual environment on the robot, so that the node can be run in Python 2. The other ROS nodes should not be run in this virtual environment. To do this, set up a virtual environment using [virtualenv](https://virtualenv.pypa.io/en/latest/), and install necessary but missing Python 3 packages within the environment using pip (and not apt-get) to run this module. You can use the instructions below as reference.
-
-```
-pip install virtualenv
-virtualenv -p python3 aa_env
-pip install pyyaml
-pip install rospkg
-pip install theano
-```
-
+Save trained models into the directory ```src/aa_planner/```. The circle planner must be saved with the name ```circle_model.save``` and the straight line planner must be saved with the name ```straight_model.save```.
 
 ## Usage
 
-Run the commands below within the virtual environment set up in the section above. Note the setup bash script for the catkin workspace should be sourced as well.
+There are three possible modes available: ```straight```, ```circle``` and ```rounded_square```. The first two modes command the car to move in a straight line and a circle, respectively. The last mode integrates the two trained planners to command the car to move in a trajectory that resembles a square with rounded, circular corners. Use the following command to run the planner on the robot:
+
 ```
-roslaunch aa_planner planner.launch
+roslaunch aa_planner planner.launch mode:={straight, circle, rounded_square}
 ```
