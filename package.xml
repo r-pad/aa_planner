@@ -4,10 +4,10 @@
   <version>0.0.0</version>
   <description>Control the robot with pre-trained policies</description>
 
-  <maintainer email="esahn@andrew.cmu.edu">Edward Ahn</maintainer>
+  <maintainer email="edhyah@gmail.com">Edward Ahn</maintainer>
   <license>TODO</license>
   <url type="website">https://github.com/r-pad/aa_planner</url>
-  <author email="esahn@andrew.cmu.edu">Edward Ahn</author>
+  <author email="edhyah@gmail.com">Edward Ahn</author>
 
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>ackermann_msgs</build_depend>

@@ -14,6 +14,6 @@
 
     # Rosbag data collection
     <node pkg="rosbag" type="record" name="rosbag_record_ffast"
-        args="record -o /home/nvidia/Documents/rosbags/run /ekf_localization_odom /commands/keyboard"
+        args="record -o /home/nvidia/Documents/rosbags/run /ekf_localization/odom /commands/keyboard"
         if="$(arg record)" />
 </launch>
