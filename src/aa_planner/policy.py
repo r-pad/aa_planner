@@ -37,8 +37,18 @@ class Policy(object):
                 [0,0,np.pi], [1,0,np.pi],
                 [2,1,-np.pi/2], [2,2,-np.pi/2],
                 [1,3,0], [0,3,0], [-1,2,np.pi/2], [-1,1,np.pi/2]]
+
+        # Parameters for circles to follow
+        #   Specified as (center_x, center_y, radius) where
+        #   (center_x, center_y) is the center of the circle.
         self._circle_params = [
                 [0,1,1], [1,1,1], [1,2,1], [0,2,1]]
+
+        # Parameters for straight lines to follow
+        #   Specified as (point_x, point_y, direction) where
+        #   (point_x, point_y) is a point on the line and direction
+        #   is the direction of the line (0 for y=0 going right,
+        #   pi/2 for x=0 going up, -pi/2 for y=0 going left, etc.).
         self._straight_params = [
                 [0,0,0], [2,1,np.pi/2],
                 [1,3,-np.pi], [-1,2,-np.pi/2]]
@@ -144,6 +154,7 @@ class Policy(object):
         x, y, yaw, x_dot, y_dot, yaw_dot = state
         target_dir = target_dir % (2*np.pi)
 
+        # Project line to y=0
         current_dir = np.arctan2((y - y0), (x - x0))
         projection_dir = current_dir - target_dir
         dist = np.sqrt(np.square(x - x0) + np.square(y - y0))
