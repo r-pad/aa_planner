@@ -90,7 +90,17 @@ class Policy(object):
             action = self._get_action_circle(state)
         else:
             action = self._get_action_straight(state)
-        return self._scaled_action(action)
+
+        waypoint = self._waypoints[self._waypoint_num][:2]
+
+        # Odd waypoints are reached via straight lines, even waypoints
+        # are reached via circles
+        if self._waypoint_num % 2 == 0:
+            curvature = 1
+        else:
+            curvature = 0
+
+        return self._scaled_action(action), waypoint, curvature
 
 
     def _scaled_action(self, action):

@@ -30,8 +30,10 @@ class RLPlanner(object):
         """
         self.policy = Policy(planner_mode=planner_mode)
         rospy.init_node('rl_planner')
-        self.pub = rospy.Publisher("commands/keyboard",
+        self.action_pub = rospy.Publisher("aa_planner/commands",
                 ackermann_msgs.msg.AckermannDriveStamped, queue_size=1)
+        self.waypoint_pub = rospy.Publisher("aa_planner/waypoints",
+                nav_msgs.msg.Odometry, queue_size=1)
         rospy.Subscriber("ekf_localization/odom", nav_msgs.msg.Odometry,
                 self.odometry_callback)
 
@@ -53,11 +55,16 @@ class RLPlanner(object):
 
         # Publish action from pre-trained model
         #   Note: sign of velocity command reversed for current robot
-        action = self.policy.get_action(state)
-        msg = ackermann_msgs.msg.AckermannDriveStamped()
-        msg.drive.speed = action[0]
-        msg.drive.steering_angle = action[1]
-        self.pub.publish(msg)
+        action, waypoint, curvature = self.policy.get_action(state)
+        action_msg = ackermann_msgs.msg.AckermannDriveStamped()
+        action_msg.drive.speed = action[0]
+        action_msg.drive.steering_angle = action[1]
+        self.action_pub.publish(action_msg)
+        waypoint_msg = nav_msgs.msg.Odometry
+        waypoint_msg.pose.pose.position.x = waypoint[0]
+        waypoint_msg.pose.pose.position.y = waypoint[1]
+        waypoint_msg.pose.pose.position.z = curvature
+        self.waypoint_pub.publish(waypoint_msg)
 
 
 def parse_arguments():
