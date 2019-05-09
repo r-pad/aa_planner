@@ -11,6 +11,7 @@ run a pre-trained policy on the robot.
 import argparse
 
 import ackermann_msgs.msg
+import geometry_msgs.msg
 import nav_msgs.msg
 import rospy
 
@@ -33,7 +34,7 @@ class RLPlanner(object):
         self.action_pub = rospy.Publisher("aa_planner/commands",
                 ackermann_msgs.msg.AckermannDriveStamped, queue_size=1)
         self.waypoint_pub = rospy.Publisher("aa_planner/waypoints",
-                nav_msgs.msg.Odometry, queue_size=1)
+                geometry_msgs.msg.Point, queue_size=1)
         rospy.Subscriber("ekf_localization/odom", nav_msgs.msg.Odometry,
                 self.odometry_callback)
 
@@ -60,10 +61,10 @@ class RLPlanner(object):
         action_msg.drive.speed = action[0]
         action_msg.drive.steering_angle = action[1]
         self.action_pub.publish(action_msg)
-        waypoint_msg = nav_msgs.msg.Odometry
-        waypoint_msg.pose.pose.position.x = waypoint[0]
-        waypoint_msg.pose.pose.position.y = waypoint[1]
-        waypoint_msg.pose.pose.position.z = curvature
+        waypoint_msg = geometry_msgs.msg.Point()
+        waypoint_msg.x = waypoint[0]
+        waypoint_msg.y = waypoint[1]
+        waypoint_msg.z = curvature
         self.waypoint_pub.publish(waypoint_msg)
 
 

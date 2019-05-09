@@ -74,10 +74,14 @@ class Policy(object):
         """
         if self._planner_mode == "straight":
             action = self._get_action_straight(state)
-            return self._scaled_action(action)
+            waypoint = [0,0]    # Dummy waypoint
+            curvature = 0
+            return self._scaled_action(action), waypoint, curvature
         elif self._planner_mode == "circle":
             action = self._get_action_circle(state)
-            return self._scaled_action(action)
+            waypoint = [0,0]    # Dummy waypoint
+            curvature = 0
+            return self._scaled_action(action), waypoint, curvature
 
         # Check if state at waypoint and if so, switch trajectory type
         if self._state_at_waypoint(state):
